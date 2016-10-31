@@ -18,9 +18,9 @@ class UdpContactSensorPlugin
     this.name = config.name;
     this.listen_port = config.listen_port || 8266;
     this.data = config.data || {
-      "Switch #2": { on: "3231", off: "3230" },
-      "Switch #3": { on: "3331", off: "3330" },
-      "Switch #4": { on: "3431", off: "3430" },
+      "Switch #2": { on: "02ff", off: "0200" },
+      "Switch #3": { on: "03ff", off: "0300" },
+      "Switch #4": { on: "04ff", off: "0400" },
     };
     this.ondata2contact = {};
     this.offdata2contact = {};
