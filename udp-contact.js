@@ -1,7 +1,6 @@
 'use strict';
 
-const path = require('path');
-const child_process = require('child_process');
+const dgram = require('dgram');
 
 let Service, Characteristic;
 
@@ -17,59 +16,65 @@ class UdpContactSensorPlugin
   constructor(log, config) {
     this.log = log;
     this.name = config.name;
-    // One possible setup:
-    // ground = 20, normally-closed switches tie to ground, open (then pulled up) when pressed
-    // wired 22,24,26 physical, but not in order - reordered here
-    //  24 # BCM 8 / CE0 - the closest to ground (on the physical switch!)
-    //  26 # BCM 7 / CE1
-    //  22 # BCM 25
-    this.pins = config.pins || {
-      "Switch A": 24,
-      "Switch B": 26,
-      "Switch C": 22
+    this.listen_port = config.listen_port || 8266;
+    this.data = config.data || {
+      "Switch #2": { on: "3231", off: "3230" },
+      "Switch #3": { on: "3331", off: "3330" },
+      "Switch #4": { on: "3431", off: "3430" },
     };
+    this.ondata2contact = {};
+    this.offdata2contact = {};
+  
 
-    this.pin2contact = {};
     this.contacts = [];
-    const helperPath = path.join(__dirname, 'watchpins.py');
-    const args = ['-u', helperPath];
 
-    for (let name of Object.keys(this.pins)) {
-      const pin = this.pins[name];
-
+    for (let name of Object.keys(this.data)) {
       const subtype = name; 
-      const contact = new Service.UdpContactSensor(name, subtype);
+      const contact = new Service.ContactSensor(name, subtype);
       contact
-        .getCharacteristic(Characteristic.UdpContactSensorState)
+        .getCharacteristic(Characteristic.ContactSensorState)
         .setValue(false);
 
-      this.pin2contact[pin] = contact;
+      this.ondata2contact[this.data[name].on] = contact;
+      this.offdata2contact[this.data[name].off] = contact;
+
       this.contacts.push(contact);
-      args.push(''+pin);
     }
-    console.log('contact sensors', this.pin2contact);
-    this.helper = child_process.spawn('python', args);
 
-    this.helper.stderr.on('data', (err) => {
-      throw new Error(`watchpins helper error: ${err})`);
-    }); 
-
-    this.helper.stdout.on('data', (data) => {
-      console.log(`data = |${data}|`);
-      const lines = data.toString().trim().split('\n');
-      for (let line of lines) {
-        let [pin, state] = line.trim().split(' ');
-        pin = parseInt(pin, 10);
-        state = !!parseInt(state, 10);
-        console.log(`pin ${pin} changed state to ${state}`);
-  
-        const contact = this.pin2contact[pin];
-        if (!contact) throw new Error(`received pin event for unconfigured pin: ${pin}`);
-        contact
-          .getCharacteristic(Characteristic.UdpContactSensorState)
-          .setValue(state);
-      }
+    this.server = dgram.createSocket('udp4');
+    
+    this.server.on('error', (err) => {
+      console.log(`udp server error:\n${err.stack}`);
+      server.close();
     });
+
+    this.server.on('message', (msg, rinfo) => {
+      console.log(`server received udp: ${msg} from ${rinfo.address}`);
+
+      const msg_hex = msg.toString('hex'); // for convenience in configuration files
+    
+      let contact, state;
+      if (this.ondata2contact[msg_hex]) {
+        contact = this.ondata2contact[msg_hex];
+        state = true;
+      } else if (this.offdata2contact[msg_hex]) {
+        contact = this.offdata2contact[msg_hex];
+        state = false;
+      }
+
+      if (!contact) {
+        console.log(`unknown udp payload: ${msg_hex} not matching any contact sensor`);
+        return;
+      }
+
+      // Notify of state change
+      contact
+        .getCharacteristic(Characteristic.ContactSensorState)
+        .setValue(state);
+      console.log(`udp notified ${contact} -> ${state} from ${msg_hex} via ${rinfo.address}`);
+    });
+
+    this.server.bind(this.listen_port);
   }
 
   getServices() {

@@ -10,19 +10,21 @@ UDP server contact sensor input plugin for [Homebridge](https://github.com/nfari
 ## Configuration
 * `accessory`: "UdpContactSensor"
 * `name`: descriptive name
-* `pins`: object of names to GPIO physical pins TODO
+* `listen_port`: UDP port to listen on for incoming messages
+* `data`: object of names to matching on/off datagram payloads
 
 Example configuration:
 
 ```json
     "accessories": [
         {
-            "accessory": "ContactSensor",
-            "name": "Contact Sensors",
-            "pins": {
-                "Switch A": 24,
-                "Switch B": 26,
-                "Switch C": 22
+            "accessory": "UdpContactSensor",
+            "name": "UDP Contact Sensors",
+            "listen_port": 8266,
+            "data": {
+                "Switch #2": { "on": "3231", "off": "3230" },
+                "Switch #3": { "on": "3331", "off": "3330" },
+                "Switch #4": { "on": "3431", "off": "3430" }
             }
         }
     ]
