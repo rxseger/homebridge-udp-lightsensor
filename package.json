@@ -2,7 +2,7 @@
   "name": "homebridge-udp-contactsensor",
   "version": "1.0.0",
   "description": "Contact sensor interrupt GPIO input plugin for Homebridge",
-  "main": "contact.js",
+  "main": "udp-contact.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
