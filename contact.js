@@ -9,10 +9,10 @@ module.exports = (homebridge) => {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
 
-  homebridge.registerAccessory('homebridge-contactsensor', 'ContactSensor', ContactSensorPlugin);
+  homebridge.registerAccessory('homebridge-contactsensor', 'UdpContactSensor', UdpContactSensorPlugin);
 };
 
-class ContactSensorPlugin
+class UdpContactSensorPlugin
 {
   constructor(log, config) {
     this.log = log;
@@ -38,9 +38,9 @@ class ContactSensorPlugin
       const pin = this.pins[name];
 
       const subtype = name; 
-      const contact = new Service.ContactSensor(name, subtype);
+      const contact = new Service.UdpContactSensor(name, subtype);
       contact
-        .getCharacteristic(Characteristic.ContactSensorState)
+        .getCharacteristic(Characteristic.UdpContactSensorState)
         .setValue(false);
 
       this.pin2contact[pin] = contact;
@@ -66,7 +66,7 @@ class ContactSensorPlugin
         const contact = this.pin2contact[pin];
         if (!contact) throw new Error(`received pin event for unconfigured pin: ${pin}`);
         contact
-          .getCharacteristic(Characteristic.ContactSensorState)
+          .getCharacteristic(Characteristic.UdpContactSensorState)
           .setValue(state);
       }
     });

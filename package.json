@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-contactsensor",
+  "name": "homebridge-udp-contactsensor",
   "version": "1.0.0",
   "description": "Contact sensor interrupt GPIO input plugin for Homebridge",
   "main": "contact.js",
@@ -8,21 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rxseger/homebridge-contactsensor.git"
+    "url": "git://github.com/rxseger/homebridge-udp-contactsensor.git"
   },
   "keywords": [
     "homebridge-plugin",
-    "contactsensor",
+    "udp-contactsensor",
     "gpio"
   ],
   "author": "rxserger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rxseger/homebridge-contactsensor/issues"
+    "url": "https://github.com/rxseger/homebridge-udp-contactsensor/issues"
   },
   "engines": {
     "node": ">=6.0.0",
     "homebridge": ">=0.2.0"
   },
-  "homepage": "https://github.com/rxseger/homebridge-contactsensor#readme"
+  "homepage": "https://github.com/rxseger/homebridge-udp-contactsensor#readme"
 }
