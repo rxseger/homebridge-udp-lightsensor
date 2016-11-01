@@ -1,6 +1,6 @@
 {
   "name": "homebridge-udp-lightsensor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UDP server light sensor plugin for Homebridge",
   "main": "udp-lightsensor.js",
   "scripts": {
