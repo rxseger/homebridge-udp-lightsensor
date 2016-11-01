@@ -1,28 +1,28 @@
 {
-  "name": "homebridge-udp-contactsensor",
-  "version": "1.0.0",
-  "description": "UDP server contact sensor plugin for Homebridge",
-  "main": "udp-contact.js",
+  "name": "homebridge-udp-lightsensor",
+  "version": "0.0.1",
+  "description": "UDP server light sensor plugin for Homebridge",
+  "main": "udp-light.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rxseger/homebridge-udp-contactsensor.git"
+    "url": "git://github.com/rxseger/homebridge-udp-lightsensor.git"
   },
   "keywords": [
     "homebridge-plugin",
-    "udp-contactsensor",
-    "gpio"
+    "light",
+    "sensor"
   ],
   "author": "rxserger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rxseger/homebridge-udp-contactsensor/issues"
+    "url": "https://github.com/rxseger/homebridge-udp-lightsensor/issues"
   },
   "engines": {
     "node": ">=6.0.0",
     "homebridge": ">=0.2.0"
   },
-  "homepage": "https://github.com/rxseger/homebridge-udp-contactsensor#readme"
+  "homepage": "https://github.com/rxseger/homebridge-udp-lightsensor#readme"
 }

@@ -8,7 +8,7 @@ module.exports = (homebridge) => {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
 
-  homebridge.registerAccessory('homebridge-contactsensor', 'UdpContactSensor', UdpContactSensorPlugin);
+  homebridge.registerAccessory('homebridge-lightsensor', 'UdpContactSensor', UdpContactSensorPlugin);
 };
 
 class UdpContactSensorPlugin
@@ -22,23 +22,23 @@ class UdpContactSensorPlugin
       "Switch #3": { on: "03ff", off: "0300" },
       "Switch #4": { on: "04ff", off: "0400" },
     };
-    this.ondata2contact = {};
-    this.offdata2contact = {};
+    this.ondata2light = {};
+    this.offdata2light = {};
   
 
-    this.contacts = [];
+    this.lights = [];
 
     for (let name of Object.keys(this.data)) {
       const subtype = name; 
-      const contact = new Service.ContactSensor(name, subtype);
-      contact
+      const light = new Service.ContactSensor(name, subtype);
+      light
         .getCharacteristic(Characteristic.ContactSensorState)
         .setValue(false);
 
-      this.ondata2contact[this.data[name].on] = contact;
-      this.offdata2contact[this.data[name].off] = contact;
+      this.ondata2light[this.data[name].on] = contact;
+      this.offdata2light[this.data[name].off] = contact;
 
-      this.contacts.push(contact);
+      this.lights.push(contact);
     }
 
     this.server = dgram.createSocket('udp4');
@@ -53,32 +53,32 @@ class UdpContactSensorPlugin
 
       const msg_hex = msg.toString('hex'); // for convenience in configuration files
     
-      let contact, state;
-      if (this.ondata2contact[msg_hex]) {
-        contact = this.ondata2contact[msg_hex];
+      let light, state;
+      if (this.ondata2light[msg_hex]) {
+        light = this.ondata2contact[msg_hex];
         state = true;
-      } else if (this.offdata2contact[msg_hex]) {
-        contact = this.offdata2contact[msg_hex];
+      } else if (this.offdata2light[msg_hex]) {
+        light = this.offdata2contact[msg_hex];
         state = false;
       }
 
-      if (!contact) {
-        console.log(`unknown udp payload: ${msg_hex} not matching any contact sensor`);
+      if (!light) {
+        console.log(`unknown udp payload: ${msg_hex} not matching any light sensor`);
         return;
       }
 
       // Notify of state change
-      contact
+      light
         .getCharacteristic(Characteristic.ContactSensorState)
         .setValue(state);
-      console.log(`udp notified ${contact} -> ${state} from ${msg_hex} via ${rinfo.address}`);
+      console.log(`udp notified ${light} -> ${state} from ${msg_hex} via ${rinfo.address}`);
     });
 
     this.server.bind(this.listen_port);
   }
 
   getServices() {
-    return this.contacts;
+    return this.lights;
   }
 }
 
