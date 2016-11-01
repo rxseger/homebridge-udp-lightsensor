@@ -30,10 +30,11 @@ Example configuration:
     ]
 ```
 
-Creates a ContactSensor service for each pin.
+Creates a ContactSensor service for each switch in `data`.
 
-What use are contact sensors? You can control other devices when they are opened or closed.
-For example, you could automatically turn on a light when you open your door.
+Listens for UDP datagrams on port 8266, turns on Switch #2 upon receiving
+the two bytes 02 followed by ff, turns it off when receiving 02 followed by 00,
+and so on.
 
 ## See also
 
