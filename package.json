@@ -2,7 +2,7 @@
   "name": "homebridge-udp-lightsensor",
   "version": "0.0.1",
   "description": "UDP server light sensor plugin for Homebridge",
-  "main": "udp-light.js",
+  "main": "udp-lightsensor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
