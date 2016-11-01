@@ -31,6 +31,7 @@ payload interpreted as an ASCII string representing the light level in lux.
 
 ## See also
 
+* [cooper](https://github.com/rxseger/cooper) for sending UDP packets on ADC input change from an ESP8266
 * [homebridge-analog-lightsensor](https://github.com/rxseger/homebridge-analog-lightsensor)
 * [homebridge-udp-contactsensor](https://github.com/rxseger/homebridge-udp-contactsensor)
 * [homebridge-gpio-cmd](https://github.com/rxseger/homebridge-gpio-cmd) etc. for GPIO outputs
