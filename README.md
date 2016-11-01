@@ -11,7 +11,6 @@ UDP server light sensor input plugin for [Homebridge](https://github.com/nfarina
 * `accessory`: "UdpLightSensor"
 * `name`: descriptive name
 * `listen_port`: UDP port to listen on for incoming messages
-* `data`: object of names to matching on/off datagram payloads
 
 Example configuration:
 
@@ -19,26 +18,21 @@ Example configuration:
     "accessories": [
         {
             "accessory": "UdpLightSensor",
-            "name": "UDP Light Sensors",
-            "listen_port": 8266,
-            "data": {
-                "Switch #2": { "on": "02ff", "off": "0200" },
-                "Switch #3": { "on": "03ff", "off": "0300" },
-                "Switch #4": { "on": "04ff", "off": "0400" }
-            }
+            "name": "Lighting",
+            "listen_port": 8267
         }
     ]
 ```
 
-Creates a LightSensor service for each switch in `data`.
+Creates a LightSensor service named Lighting.
 
-Listens for UDP datagrams on port 8266, turns on Switch #2 upon receiving
-the two bytes 02 followed by ff, turns it off when receiving 02 followed by 00,
-and so on.
+Listens for UDP datagrams on port 8267, and reports the light level as the
+payload interpreted as an ASCII string representing the light level in lux.
 
 ## See also
 
-* [homebridge-lightsensor](https://github.com/rxseger/homebridge-lightsensor)
+* [homebridge-analog-lightsensor](https://github.com/rxseger/homebridge-analog-lightsensor)
+* [homebridge-udp-contactsensor](https://github.com/rxseger/homebridge-udp-contactsensor)
 * [homebridge-gpio-cmd](https://github.com/rxseger/homebridge-gpio-cmd) etc. for GPIO outputs
 * [homebridge-pwm-fan](https://github.com/rxseger/homebridge-pwm-fan)
 
